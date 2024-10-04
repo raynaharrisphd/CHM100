@@ -121,3 +121,36 @@ Data from data from
 
     ## Warning in write.csv(df2, file = "periodictrends_2.csv", quote = F, append =
     ## F): attempt to set 'append' ignored
+
+    df3 <- df %>%
+      select(AtomicNumber, Symbol, Element, AtomicMass,
+             NumberofNeutrons:NumberofElectrons) %>%
+      pivot_longer(cols = AtomicMass:NumberofElectrons, 
+                   names_to = "Particle", 
+                   values_to = "Value") %>%
+      filter(Particle != "AtomicMass") %>%
+      mutate(Particle = factor(Particle, levels = c( "NumberofNeutrons", "NumberofElectrons", "NumberofProtons")),
+             Particle = fct_recode(Particle, "Neutrons" = "NumberofNeutrons",
+                                   "Electrons" = "NumberofElectrons",
+                                   "Protons" = "NumberofProtons"))
+
+    head(df3)
+
+    ## # A tibble: 6 × 5
+    ##   AtomicNumber Symbol Element  Particle  Value
+    ##          <int> <chr>  <chr>    <fct>     <dbl>
+    ## 1            1 H      Hydrogen Neutrons      0
+    ## 2            1 H      Hydrogen Protons       1
+    ## 3            1 H      Hydrogen Electrons     1
+    ## 4            2 He     Helium   Neutrons      2
+    ## 5            2 He     Helium   Protons       2
+    ## 6            2 He     Helium   Electrons     2
+
+    ggplot(df3, aes(x = AtomicNumber, y = Value, color = Particle, shape = Particle)) +
+      geom_point() +
+      labs(x = "Atomic Number",
+           y = "Number of Subatomical Particles",
+           subtitle = "Subatomic Particals in Atoms") +
+      theme_bw() 
+
+![](./images/periodictrends-3.png)
