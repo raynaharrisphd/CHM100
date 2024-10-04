@@ -6,3 +6,4 @@ Chemistry Data Exploration
 
 ![](./images/periodictrends-1.png)
 ![](./images/periodictrends-2.png)
+![](./images/periodictrends-3.png)
