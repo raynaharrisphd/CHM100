@@ -13,3 +13,5 @@
 ![](./images/periodictrends-1.png)
 ![](./images/periodictrends-2.png)
 ![](./images/periodictrends-3.png)
+![](./images/periodictrends-4.png)
+![](./images/periodictrends-5.png)

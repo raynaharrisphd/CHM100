@@ -30,7 +30,7 @@ df2 <- df %>%
          Orbital = ifelse(AtomicNumber < 81 & AtomicNumber > 70, "d",  Orbital),
          Orbital = factor(Orbital, levels = c("s", "p", "d", "f")),
          Orbital = fct_na_value_to_level(Orbital, "s")) %>%
-  select(AtomicNumber:AtomicMass, AtomicRadius, NumberofShells, NumberofValence, Orbital) %>%
+  select(AtomicNumber:AtomicMass, AtomicRadius, NumberofShells, NumberofValence, Orbital, FirstIonization) %>%
   mutate(Label = as.numeric(ifelse(NumberofValence == 1, NumberofShells, ""))) %>%
   drop_na(AtomicRadius) 
 
@@ -49,6 +49,26 @@ ggplot(df2, aes(x = AtomicNumber, y = AtomicRadius,
   scale_x_continuous(breaks = c(2,10,18,36,54,86)) 
 
 
+ggplot(df2, aes(x = AtomicNumber, y = FirstIonization,
+                label = Label ), na.rm) +
+  geom_line(color = "grey") +
+  geom_point(aes(color = Orbital)) +
+  labs(x = "Atomic Number",
+       y = " Ionization Energy\n(Numbers above points represent shell numbers.)",
+       subtitle = "Periodic Variation in Ionization with Atomic Number") +
+  theme_bw() 
+
+ggplot(df2, aes(x = AtomicRadius, y = FirstIonization, 
+                label = Label ), na.rm) +
+  geom_line(color = "grey") +
+  geom_point(aes(color = Orbital)) +
+  labs(x = "Atomic Radius (pm)",
+       y = " Ionization Energy\n(Numbers above points represent shell numbers.)",
+       subtitle = "Variation of Atomic Radius and Ionization Energy") +
+  theme_bw() 
+
+
+
 ggplot(df2, aes(x = as.factor(NumberofShells), y = AtomicRadius, label = AtomicRadius)) +
   #geom_boxplot(aes(color = Orbital)) +
   geom_point(aes(color = Orbital, shape = Orbital),
@@ -58,10 +78,6 @@ ggplot(df2, aes(x = as.factor(NumberofShells), y = AtomicRadius, label = AtomicR
        subtitle = "Periodic Variation of Atomic Radius with Atomic Number") +
   theme_bw() +
   geom_text(size = 3, nudge_x = 0.2)
-
-write.csv(df, file = "periodictable.csv", quote = F,append = F)
-write.csv(df2, file = "periodictrends_2.csv", quote = F,append = F)
-
 
 df3 <- df %>%
   select(AtomicNumber, Symbol, Element, NumberofValence, AtomicMass,
@@ -88,5 +104,10 @@ ggplot(df3, aes(x = AtomicNumber, y = Value, label = myLabel)) +
   scale_x_continuous(breaks = c(2,10,18,36,54,86,118)) +
   geom_text(size = 3, nudge_y = -5)
 
+```
 
+
+```{r write}
+write.csv(df, file = "periodictable.csv", quote = F,append = F)
+write.csv(df2, file = "periodictrends_2.csv", quote = F,append = F)
 ```

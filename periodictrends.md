@@ -64,7 +64,7 @@ Data from data from
              Orbital = ifelse(AtomicNumber < 81 & AtomicNumber > 70, "d",  Orbital),
              Orbital = factor(Orbital, levels = c("s", "p", "d", "f")),
              Orbital = fct_na_value_to_level(Orbital, "s")) %>%
-      select(AtomicNumber:AtomicMass, AtomicRadius, NumberofShells, NumberofValence, Orbital) %>%
+      select(AtomicNumber:AtomicMass, AtomicRadius, NumberofShells, NumberofValence, Orbital, FirstIonization) %>%
       mutate(Label = as.numeric(ifelse(NumberofValence == 1, NumberofShells, ""))) %>%
       drop_na(AtomicRadius) 
 
@@ -77,13 +77,13 @@ Data from data from
     ## 4            4 Beryllium     Be      9.012         1.40              2
     ## 5            5     Boron      B     10.811         1.20              2
     ## 6            6    Carbon      C     12.011         0.91              2
-    ##   NumberofValence Orbital Label
-    ## 1               1       s     1
-    ## 2              NA       s    NA
-    ## 3               1       s     2
-    ## 4               2       s    NA
-    ## 5               3       p    NA
-    ## 6               4       p    NA
+    ##   NumberofValence Orbital FirstIonization Label
+    ## 1               1       s         13.5984     1
+    ## 2              NA       s         24.5874    NA
+    ## 3               1       s          5.3917     2
+    ## 4               2       s          9.3227    NA
+    ## 5               3       p          8.2980    NA
+    ## 6               4       p         11.2603    NA
 
     ggplot(df2, aes(x = AtomicNumber, y = AtomicRadius,
                     label = Label ), na.rm) +
@@ -104,6 +104,28 @@ Data from data from
 
 ![](./images/periodictrends-1.png)
 
+    ggplot(df2, aes(x = AtomicNumber, y = FirstIonization,
+                    label = Label ), na.rm) +
+      geom_line(color = "grey") +
+      geom_point(aes(color = Orbital)) +
+      labs(x = "Atomic Number",
+           y = " Ionization Energy\n(Numbers above points represent shell numbers.)",
+           subtitle = "Periodic Variation in Ionization with Atomic Number") +
+      theme_bw() 
+
+![](./images/periodictrends-2.png)
+
+    ggplot(df2, aes(x = AtomicRadius, y = FirstIonization, 
+                    label = Label ), na.rm) +
+      geom_line(color = "grey") +
+      geom_point(aes(color = Orbital)) +
+      labs(x = "Atomic Radius (pm)",
+           y = " Ionization Energy\n(Numbers above points represent shell numbers.)",
+           subtitle = "Variation of Atomic Radius and Ionization Energy") +
+      theme_bw() 
+
+![](./images/periodictrends-3.png)
+
     ggplot(df2, aes(x = as.factor(NumberofShells), y = AtomicRadius, label = AtomicRadius)) +
       #geom_boxplot(aes(color = Orbital)) +
       geom_point(aes(color = Orbital, shape = Orbital),
@@ -114,17 +136,7 @@ Data from data from
       theme_bw() +
       geom_text(size = 3, nudge_x = 0.2)
 
-![](./images/periodictrends-2.png)
-
-    write.csv(df, file = "periodictable.csv", quote = F,append = F)
-
-    ## Warning in write.csv(df, file = "periodictable.csv", quote = F, append = F):
-    ## attempt to set 'append' ignored
-
-    write.csv(df2, file = "periodictrends_2.csv", quote = F,append = F)
-
-    ## Warning in write.csv(df2, file = "periodictrends_2.csv", quote = F, append =
-    ## F): attempt to set 'append' ignored
+![](./images/periodictrends-4.png)
 
     df3 <- df %>%
       select(AtomicNumber, Symbol, Element, NumberofValence, AtomicMass,
@@ -163,4 +175,14 @@ Data from data from
 
     ## Warning: Removed 69 rows containing missing values (`geom_text()`).
 
-![](./images/periodictrends-3.png)
+![](./images/periodictrends-5.png)
+
+    write.csv(df, file = "periodictable.csv", quote = F,append = F)
+
+    ## Warning in write.csv(df, file = "periodictable.csv", quote = F, append = F):
+    ## attempt to set 'append' ignored
+
+    write.csv(df2, file = "periodictrends_2.csv", quote = F,append = F)
+
+    ## Warning in write.csv(df2, file = "periodictrends_2.csv", quote = F, append =
+    ## F): attempt to set 'append' ignored
