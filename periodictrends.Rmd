@@ -34,7 +34,7 @@ df2 <- df %>%
   mutate(Label = as.numeric(ifelse(NumberofValence == 1, NumberofShells, ""))) %>%
   drop_na(AtomicRadius) 
 
-str(df2)
+head(df2)
 
 ggplot(df2, aes(x = AtomicNumber, y = AtomicRadius,
                 label = Label ), na.rm) +
@@ -46,8 +46,6 @@ ggplot(df2, aes(x = AtomicNumber, y = AtomicRadius,
   theme_bw() +
   geom_text(nudge_y = 0.1) +
   xlim(0, 87)
-
-head(df2)
 
 ggplot(df2, aes(x = as.factor(NumberofShells), y = AtomicRadius, label = AtomicRadius)) +
   #geom_boxplot(aes(color = Orbital)) +

@@ -68,34 +68,6 @@ Data from data from
       mutate(Label = as.numeric(ifelse(NumberofValence == 1, NumberofShells, ""))) %>%
       drop_na(AtomicRadius) 
 
-    str(df2)
-
-    ## 'data.frame':    86 obs. of  9 variables:
-    ##  $ AtomicNumber   : int  1 2 3 4 5 6 7 8 9 10 ...
-    ##  $ Element        : chr  "Hydrogen" "Helium" "Lithium" "Beryllium" ...
-    ##  $ Symbol         : chr  "H" "He" "Li" "Be" ...
-    ##  $ AtomicMass     : num  1.01 4 6.94 9.01 10.81 ...
-    ##  $ AtomicRadius   : num  0.79 0.49 2.1 1.4 1.2 0.91 0.75 0.65 0.57 0.51 ...
-    ##  $ NumberofShells : int  1 1 2 2 2 2 2 2 2 2 ...
-    ##  $ NumberofValence: int  1 NA 1 2 3 4 5 6 7 8 ...
-    ##  $ Orbital        : Factor w/ 4 levels "s","p","d","f": 1 1 1 1 2 2 2 2 2 2 ...
-    ##  $ Label          : num  1 NA 2 NA NA NA NA NA NA NA ...
-
-    ggplot(df2, aes(x = AtomicNumber, y = AtomicRadius,
-                    label = Label ), na.rm) +
-      geom_line(color = "grey") +
-      geom_point(aes(color = Orbital)) +
-      labs(y = "Atomic Radius (pm)",
-           x = "Atomic Number\n(Numbers above points represent shell numbers.)",
-           subtitle = "Periodic Variation of Atomic Radius with Atomic Number") +
-      theme_bw() +
-      geom_text(nudge_y = 0.1) +
-      xlim(0, 87)
-
-    ## Warning: Removed 80 rows containing missing values (`geom_text()`).
-
-![](./images/periodictrends-1.png)
-
     head(df2)
 
     ##   AtomicNumber   Element Symbol AtomicMass AtomicRadius NumberofShells
@@ -112,6 +84,21 @@ Data from data from
     ## 4               2       s    NA
     ## 5               3       p    NA
     ## 6               4       p    NA
+
+    ggplot(df2, aes(x = AtomicNumber, y = AtomicRadius,
+                    label = Label ), na.rm) +
+      geom_line(color = "grey") +
+      geom_point(aes(color = Orbital)) +
+      labs(y = "Atomic Radius (pm)",
+           x = "Atomic Number\n(Numbers above points represent shell numbers.)",
+           subtitle = "Periodic Variation of Atomic Radius with Atomic Number") +
+      theme_bw() +
+      geom_text(nudge_y = 0.1) +
+      xlim(0, 87)
+
+    ## Warning: Removed 80 rows containing missing values (`geom_text()`).
+
+![](./images/periodictrends-1.png)
 
     ggplot(df2, aes(x = as.factor(NumberofShells), y = AtomicRadius, label = AtomicRadius)) +
       #geom_boxplot(aes(color = Orbital)) +
