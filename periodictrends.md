@@ -94,7 +94,11 @@ Data from data from
            subtitle = "Periodic Variation of Atomic Radius with Atomic Number") +
       theme_bw() +
       geom_text(nudge_y = 0.1) +
-      xlim(0, 87)
+      xlim(0, 87) +
+      scale_x_continuous(breaks = c(2,10,18,36,54,86)) 
+
+    ## Scale for x is already present.
+    ## Adding another scale for x, which will replace the existing scale.
 
     ## Warning: Removed 80 rows containing missing values (`geom_text()`).
 
@@ -123,7 +127,7 @@ Data from data from
     ## F): attempt to set 'append' ignored
 
     df3 <- df %>%
-      select(AtomicNumber, Symbol, Element, AtomicMass,
+      select(AtomicNumber, Symbol, Element, NumberofValence, AtomicMass,
              NumberofNeutrons:NumberofElectrons) %>%
       pivot_longer(cols = AtomicMass:NumberofElectrons, 
                    names_to = "Particle", 
@@ -133,26 +137,30 @@ Data from data from
              Particle = fct_recode(Particle,
                                    "Electrons" = "NumberofElectrons",
                                     "Neutrons" = "NumberofNeutrons",
-                                   "Protons" = "NumberofProtons"))
+                                   "Protons" = "NumberofProtons"),
+             myLabel = ifelse(NumberofValence == 8 & Particle == "Protons", Symbol, ""))
 
     head(df3)
 
-    ## # A tibble: 6 × 5
-    ##   AtomicNumber Symbol Element  Particle  Value
-    ##          <int> <chr>  <chr>    <fct>     <dbl>
-    ## 1            1 H      Hydrogen Neutrons      0
-    ## 2            1 H      Hydrogen Protons       1
-    ## 3            1 H      Hydrogen Electrons     1
-    ## 4            2 He     Helium   Neutrons      2
-    ## 5            2 He     Helium   Protons       2
-    ## 6            2 He     Helium   Electrons     2
+    ## # A tibble: 6 × 7
+    ##   AtomicNumber Symbol Element  NumberofValence Particle  Value myLabel
+    ##          <int> <chr>  <chr>              <int> <fct>     <dbl> <chr>  
+    ## 1            1 H      Hydrogen               1 Neutrons      0 ""     
+    ## 2            1 H      Hydrogen               1 Protons       1 ""     
+    ## 3            1 H      Hydrogen               1 Electrons     1 ""     
+    ## 4            2 He     Helium                NA Neutrons      2 ""     
+    ## 5            2 He     Helium                NA Protons       2 <NA>   
+    ## 6            2 He     Helium                NA Electrons     2 ""
 
-    ggplot(df3, aes(x = AtomicNumber, y = Value, color = Particle, shape = Particle)) +
-      geom_point() +
+    ggplot(df3, aes(x = AtomicNumber, y = Value, label = myLabel)) +
+      geom_point(aes(color = Particle, shape = Particle)) +
       labs(x = "Atomic Number",
            y = "Number of Subatomical Particles",
            subtitle = "Number of Protrons, Neutrons, and Electrons in Atoms") +
       theme_bw() +
-      scale_x_continuous(breaks = c(2,10,18,36,54,86,118))
+      scale_x_continuous(breaks = c(2,10,18,36,54,86,118)) +
+      geom_text(size = 3, nudge_y = -5)
+
+    ## Warning: Removed 69 rows containing missing values (`geom_text()`).
 
 ![](./images/periodictrends-3.png)

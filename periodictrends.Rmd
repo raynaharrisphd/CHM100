@@ -45,7 +45,9 @@ ggplot(df2, aes(x = AtomicNumber, y = AtomicRadius,
        subtitle = "Periodic Variation of Atomic Radius with Atomic Number") +
   theme_bw() +
   geom_text(nudge_y = 0.1) +
-  xlim(0, 87)
+  xlim(0, 87) +
+  scale_x_continuous(breaks = c(2,10,18,36,54,86)) 
+
 
 ggplot(df2, aes(x = as.factor(NumberofShells), y = AtomicRadius, label = AtomicRadius)) +
   #geom_boxplot(aes(color = Orbital)) +
@@ -62,7 +64,7 @@ write.csv(df2, file = "periodictrends_2.csv", quote = F,append = F)
 
 
 df3 <- df %>%
-  select(AtomicNumber, Symbol, Element, AtomicMass,
+  select(AtomicNumber, Symbol, Element, NumberofValence, AtomicMass,
          NumberofNeutrons:NumberofElectrons) %>%
   pivot_longer(cols = AtomicMass:NumberofElectrons, 
                names_to = "Particle", 
@@ -72,17 +74,19 @@ df3 <- df %>%
          Particle = fct_recode(Particle,
                                "Electrons" = "NumberofElectrons",
                                 "Neutrons" = "NumberofNeutrons",
-                               "Protons" = "NumberofProtons"))
+                               "Protons" = "NumberofProtons"),
+         myLabel = ifelse(NumberofValence == 8 & Particle == "Protons", Symbol, ""))
 
 head(df3)
 
-ggplot(df3, aes(x = AtomicNumber, y = Value, color = Particle, shape = Particle)) +
-  geom_point() +
+ggplot(df3, aes(x = AtomicNumber, y = Value, label = myLabel)) +
+  geom_point(aes(color = Particle, shape = Particle)) +
   labs(x = "Atomic Number",
        y = "Number of Subatomical Particles",
        subtitle = "Number of Protrons, Neutrons, and Electrons in Atoms") +
   theme_bw() +
-  scale_x_continuous(breaks = c(2,10,18,36,54,86,118))
+  scale_x_continuous(breaks = c(2,10,18,36,54,86,118)) +
+  geom_text(size = 3, nudge_y = -5)
 
 
 ```
