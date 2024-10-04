@@ -130,8 +130,9 @@ Data from data from
                    values_to = "Value") %>%
       filter(Particle != "AtomicMass") %>%
       mutate(Particle = factor(Particle, levels = c( "NumberofNeutrons", "NumberofElectrons", "NumberofProtons")),
-             Particle = fct_recode(Particle, "Neutrons" = "NumberofNeutrons",
+             Particle = fct_recode(Particle,
                                    "Electrons" = "NumberofElectrons",
+                                    "Neutrons" = "NumberofNeutrons",
                                    "Protons" = "NumberofProtons"))
 
     head(df3)
@@ -150,7 +151,8 @@ Data from data from
       geom_point() +
       labs(x = "Atomic Number",
            y = "Number of Subatomical Particles",
-           subtitle = "Subatomic Particals in Atoms") +
-      theme_bw() 
+           subtitle = "Number of Protrons, Neutrons, and Electrons in Atoms") +
+      theme_bw() +
+      scale_x_continuous(breaks = c(2,10,18,36,54,86,118))
 
 ![](./images/periodictrends-3.png)
