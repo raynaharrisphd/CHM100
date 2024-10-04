@@ -1,0 +1,62 @@
+---
+title: "periodictrends"
+author: "Rayna M Harris"
+date: "2024-10-04"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path="./images/")
+```
+
+
+Data from data from <https://gist.github.com/GoodmanSciences/c2dd862cd38f21b0ad36b8f96b4bf1ee>
+
+
+```{r periodictrends}
+library(tidyverse)
+
+df <- read.csv("https://gist.githubusercontent.com/GoodmanSciences/c2dd862cd38f21b0ad36b8f96b4bf1ee/raw/1d92663004489a5b6926e944c1b3d9ec5c40900e/Periodic%2520Table%2520of%2520Elements.csv")
+
+head(df)
+
+df2 <- df %>%
+  mutate(Orbital = ifelse(NumberofValence == "NA", "NA",
+                          ifelse(NumberofValence < 3, "s",
+                                 ifelse(NumberofValence < 9, "p", "?"))),
+         Orbital = ifelse(AtomicNumber < 71 & AtomicNumber > 56, "f",  Orbital),
+         Orbital = ifelse(AtomicNumber < 31 & AtomicNumber > 20, "d",  Orbital),
+         Orbital = ifelse(AtomicNumber < 49 & AtomicNumber > 38, "d",  Orbital),
+         Orbital = ifelse(AtomicNumber < 81 & AtomicNumber > 70, "d",  Orbital),
+         Orbital = factor(Orbital, levels = c("s", "p", "d", "f")),
+         Orbital = fct_na_value_to_level(Orbital, "s")) %>%
+  select(AtomicNumber:AtomicMass, AtomicRadius, NumberofShells, NumberofValence, Orbital) %>%
+  mutate(Label = as.numeric(ifelse(NumberofValence == 1, NumberofShells, ""))) %>%
+  drop_na(AtomicRadius) 
+
+str(df2)
+
+ggplot(df2, aes(x = AtomicNumber, y = AtomicRadius,
+                label = Label ), na.rm) +
+  geom_line(color = "grey") +
+  geom_point(aes(color = Orbital)) +
+  labs(y = "Atomic Radius (pm)",
+       x = "Atomic Number\n(Numbers above points represent shell numbers.)",
+       subtitle = "Periodic Variation of Atomic Radius with Atomic Number") +
+  theme_bw() +
+  geom_text(nudge_y = 0.1) +
+  xlim(0, 87)
+
+head(df2)
+
+ggplot(df2, aes(x = as.factor(NumberofShells), y = AtomicRadius, label = AtomicRadius)) +
+  #geom_boxplot(aes(color = Orbital)) +
+  geom_point(aes(color = Orbital, shape = Orbital),
+             size = 2)  +
+  labs(y = "Atomic Radius (pm)",
+       x = "Number of Electron Shells",
+       subtitle = "Periodic Variation of Atomic Radius with Atomic Number") +
+  theme_bw() +
+  geom_text(size = 3, nudge_x = 0.2)
+
+```
