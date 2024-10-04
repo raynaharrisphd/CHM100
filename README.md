@@ -1,6 +1,4 @@
-# README
-
-Chemistry Data Exploration
+# Chemistry Data Exploration
 
 ## Periodic Trends
 
