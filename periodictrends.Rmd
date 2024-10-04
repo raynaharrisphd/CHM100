@@ -57,4 +57,5 @@ ggplot(df2, aes(x = as.factor(NumberofShells), y = AtomicRadius, label = AtomicR
   theme_bw() +
   geom_text(size = 3, nudge_x = 0.2)
 
+write.csv(df2, file = "periodictrends_2.csv", quote = F,append = F)
 ```

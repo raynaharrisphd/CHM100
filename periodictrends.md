@@ -111,3 +111,8 @@ Data from data from
       geom_text(size = 3, nudge_x = 0.2)
 
 ![](./images/periodictrends-2.png)
+
+    write.csv(df2, file = "periodictrends_2.csv", quote = F,append = F)
+
+    ## Warning in write.csv(df2, file = "periodictrends_2.csv", quote = F, append =
+    ## F): attempt to set 'append' ignored
