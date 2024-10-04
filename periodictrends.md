@@ -112,6 +112,11 @@ Data from data from
 
 ![](./images/periodictrends-2.png)
 
+    write.csv(df, file = "periodictable.csv", quote = F,append = F)
+
+    ## Warning in write.csv(df, file = "periodictable.csv", quote = F, append = F):
+    ## attempt to set 'append' ignored
+
     write.csv(df2, file = "periodictrends_2.csv", quote = F,append = F)
 
     ## Warning in write.csv(df2, file = "periodictrends_2.csv", quote = F, append =
