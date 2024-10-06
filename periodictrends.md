@@ -186,3 +186,8 @@ Data from data from
 
     ## Warning in write.csv(df2, file = "periodictrends_2.csv", quote = F, append =
     ## F): attempt to set 'append' ignored
+
+    df4 <- df %>%
+      select(Symbol, AtomicNumber, AtomicMass, NumberofProtons, NumberofNeutrons, NumberofElectrons, Element, Period, Phase, Type, NumberofShells, AtomicRadius:BoilingPoint, SpecificHeat, Discoverer, Year)
+
+    write.csv(df4, file = "periodic_table.csv", quote = F, row.names = F)
