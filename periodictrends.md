@@ -14,6 +14,8 @@ Data from data from
     ## ✖ dplyr::lag()    masks stats::lag()
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
+    library(stringr)
+
     df <- read.csv("https://gist.githubusercontent.com/GoodmanSciences/c2dd862cd38f21b0ad36b8f96b4bf1ee/raw/1d92663004489a5b6926e944c1b3d9ec5c40900e/Periodic%2520Table%2520of%2520Elements.csv")
 
     head(df)
@@ -188,6 +190,7 @@ Data from data from
     ## F): attempt to set 'append' ignored
 
     df4 <- df %>%
-      select(Symbol, AtomicNumber, AtomicMass, NumberofProtons, NumberofNeutrons, NumberofElectrons, Element, Period, Phase, Type, NumberofShells, AtomicRadius:BoilingPoint, SpecificHeat, Discoverer, Year)
+      select(Symbol, AtomicNumber, AtomicMass, NumberofProtons, NumberofNeutrons, NumberofElectrons, Element, Period, Phase, Type, NumberofShells, AtomicRadius:BoilingPoint, SpecificHeat, Discoverer, Year) %>%
+      mutate(Discoverer = str_replace_all(Discoverer, ",", "."))
 
     write.csv(df4, file = "periodic_table.csv", quote = F, row.names = F)
